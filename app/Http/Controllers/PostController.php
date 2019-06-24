@@ -61,9 +61,6 @@ class PostController extends Controller
 	}
 	
 	public function likePost(Request $request){
-		if (!Auth::user()) {
-			return;
-		}
 		$post_id = $request['post_id'];
 		$is_like = $request['is_like'];
 		$update = false;
