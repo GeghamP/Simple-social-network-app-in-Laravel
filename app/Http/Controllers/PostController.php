@@ -31,15 +31,15 @@ class PostController extends Controller
 		return view('dashboard',["posts" => $posts]);
 	}
 	
-	public function deletePost($post_id){
-		$post = Post::where('id',$post_id)->first();
+	public function deletePost(Request $request){
+		$post = Post::where('id',$request['post_id'])->first();
 		if(Auth::user() != $post->user){
 			return redirect()->back();
 		}
 		else{
 			$post->delete();
+			session(['message' => 'Post deleted successfully']);
 		}	
-		return redirect()->route('dashboard')->with(['message' => "Post deleted successfully"]);
 	}
 	
 	public function editPost(Request $request){

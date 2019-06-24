@@ -2,7 +2,7 @@
 	let post;
 	$('.interaction').click(function(event){
 		event.preventDefault();
-		post = event.target.parentNode.parentNode;
+		post = getPost(event);
 		
 		//when clicking edit
 		if(event.target.classList.contains('edit-post')){
@@ -25,7 +25,7 @@
 				data: {
 					is_like: is_like,
 					post_id: post.dataset['postid'],
-					_token: $('#like-dislike-token').val()
+					_token: $('#post-tools-token').val()
 				},
 				success: function(data){
 					if(is_like === 1){
@@ -48,21 +48,34 @@
 	
 	//when clicking Save button
 	$('#save_post').click(function(){
-		editAjaxCall(post.dataset['postid']);
+		ajaxCall(post.dataset['postid'],'editpost');
+	});
+	$('.delete-post').click(function(event){
+		ajaxCall(getPost(event).dataset['postid'],'deletepost');
 	});
 	
-	function editAjaxCall(post_id){
+	function getPost(event){
+		return event.target.parentNode.parentNode;
+	}
+	
+	function ajaxCall(post_id, action){
+		console.log('caal');
 		$.ajax({
 			method: 'POST',
-			url: './edit',
+			url: './'+action,
 			data: {
 				post_text: $('#post_text').val(),
 				post_id: post_id,
-				_token: $('#post-edit-token').val()
+				_token: $('#post-tools-token').val()
 			},
 				
 			success: function(data){
-				postTextElem.textContent = data['new_text'];
+				if(action === 'editpost'){
+					postTextElem.textContent = data['new_text'];
+				}
+				else if(action === 'deletepost'){
+					window.location.href = './dashboard';
+				}
 			},
 			error: function(err){
 				console.log('error');

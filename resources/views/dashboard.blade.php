@@ -35,9 +35,9 @@
 						@if(Auth::user() == $post->user)
 							|
 							<a href = "#" class = "edit-post">Edit</a> |
-							<a href = "{{ route('delete-post',['post_id' => $post->id]) }}">Delete</a> |
+							<a href = "#" class = "delete-post">Delete</a> |
 						@endif	
-						<input id ="like-dislike-token" type = "hidden" name = "_token" value = "{{ Session::token() }}">
+						<input id ="post-tools-token" type = "hidden" name = "_token" value = "{{ Session::token() }}">
 					</div> 
 				</article>
 			@endforeach
