@@ -96,4 +96,19 @@ class PostController extends Controller
 			$like->save();
 		}
 	}
+	
+	public static function verifyStatus(Post $post, $for){
+		$liked = Auth::user()->likes()->where('post_id',$post->id)->first() ?? null;
+		
+		if(is_null($liked)){
+			return $for === 'like' ? 'Like' : 'Dislike';
+		}
+		
+		if($liked->is_liked === 1){
+			return $for === 'like' ? 'You liked it' : 'Dislike';
+		}
+		else if($liked->is_liked === 0){
+			return $for === 'like' ? 'Like' : 'You disliked it';
+		}	
+	}
 }

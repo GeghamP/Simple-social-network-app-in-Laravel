@@ -14,18 +14,28 @@
 		}
 		
 		//when clicking like
-		else if(event.target.classList.contains('like')){
+		else if(event.target.classList.contains('like') || event.target.classList.contains('dislike')){
+			let like = event.currentTarget.querySelector('.like');
+			let dislike = event.currentTarget.querySelector('.dislike');
+			let is_like = event.target.classList.contains('like') ? 1 : 0;
+			
 			$.ajax({
 				method: 'POST',
 				url: './like',
 				data: {
-					is_like: 1,
+					is_like: is_like,
 					post_id: post.dataset['postid'],
 					_token: $('#like-dislike-token').val()
 				},
 				success: function(data){
-					console.log("Liked");
-					console.log(data);
+					if(is_like === 1){
+						like.textContent = like.textContent === 'Like' ? 'You liked it' : 'Like';
+						dislike.textContent = 'Dislike';
+					}
+					else if(is_like === 0){
+						dislike.textContent = dislike.textContent === 'Dislike' ? 'You disliked it' : 'Dislike';
+						like.textContent = 'Like';
+					}
 				},
 				error: function(err){
 					console.log('error');
