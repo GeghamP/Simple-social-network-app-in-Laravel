@@ -38,7 +38,7 @@ class PostController extends Controller
 		}
 		else{
 			$post->delete();
-			session(['message' => 'Post deleted successfully']);
+			$request->session()->flash('message', 'Post deleted successfully');
 		}	
 	}
 	
