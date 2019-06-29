@@ -14,10 +14,10 @@
 		}
 		
 		//when clicking like
-		else if(event.target.classList.contains('like') || event.target.classList.contains('dislike')){
+		else if(event.target.classList.contains('fa-thumbs-up') || event.target.classList.contains('fa-thumbs-down')){
 			let like = event.currentTarget.querySelector('.like');
 			let dislike = event.currentTarget.querySelector('.dislike');
-			let is_like = event.target.classList.contains('like') ? 1 : 0;
+			let is_like = event.target.classList.contains('fa-thumbs-up') ? 1 : 0;
 			
 			$.ajax({
 				method: 'POST',
@@ -29,12 +29,14 @@
 				},
 				success: function(data){
 					if(is_like === 1){
-						like.textContent = like.textContent === 'Like' ? 'You liked it' : 'Like';
-						dislike.textContent = 'Dislike';
+						let like_icon = like.querySelector('i');
+						like.innerHTML = like_icon.classList.contains('fas') ? '<i class = "far fa-thumbs-up"></i>' : '<i class = "fas fa-thumbs-up"></i>';
+						dislike.innerHTML = '<i class = "far fa-thumbs-down"></i>';
 					}
 					else if(is_like === 0){
-						dislike.textContent = dislike.textContent === 'Dislike' ? 'You disliked it' : 'Dislike';
-						like.textContent = 'Like';
+						let dislike_icon = dislike.querySelector('i');
+						dislike.innerHTML = dislike_icon.classList.contains('fas') ? '<i class = "far fa-thumbs-down"></i>' : '<i class = "fas fa-thumbs-down"></i>';
+						like.innerHTML = '<i class = "far fa-thumbs-up"></i>';
 					}
 				},
 				error: function(err){

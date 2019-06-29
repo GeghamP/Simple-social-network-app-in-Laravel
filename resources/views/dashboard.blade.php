@@ -30,8 +30,12 @@
 						Posted by {{ $post->user->first_name }} on {{ $post->created_at->format('d/M/Y h:m:s') }} 
 					</div>
 					<div class = "interaction">
-						<a href = "#" class = "like" >{{ App\Http\Controllers\PostController::verifyStatus($post,'like') }}</a> |
-						<a href = "#" class = "dislike">{{ App\Http\Controllers\PostController::verifyStatus($post,'dislike') }}</a> 
+						<a href = "#" class = "like" >
+							<i class = "{{ App\Http\Controllers\PostController::verifyStatus($post,'like') }}"></i>
+						</a> |
+						<a href = "#" class = "dislike" >
+							<i class = "{{ App\Http\Controllers\PostController::verifyStatus($post,'dislike') }}"></i>
+						</a>  
 						@if(Auth::user() == $post->user)
 							|
 							<a href = "#" class = "edit-post">Edit</a> |

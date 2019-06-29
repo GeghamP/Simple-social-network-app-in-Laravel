@@ -101,14 +101,14 @@ class PostController extends Controller
 		$liked = Auth::user()->likes()->where('post_id',$post->id)->first() ?? null;
 		
 		if(is_null($liked)){
-			return $for === 'like' ? 'Like' : 'Dislike';
+			return $for === 'like' ? 'far fa-thumbs-up' : 'far fa-thumbs-down';
 		}
 		
 		if($liked->is_liked === 1){
-			return $for === 'like' ? 'You liked it' : 'Dislike';
+			return $for === 'like' ? 'fas fa-thumbs-up' : 'far fa-thumbs-down';
 		}
 		else if($liked->is_liked === 0){
-			return $for === 'like' ? 'Like' : 'You disliked it';
+			return $for === 'like' ? 'far fa-thumbs-up' : 'fas fa-thumbs-down';
 		}	
 	}
 }
