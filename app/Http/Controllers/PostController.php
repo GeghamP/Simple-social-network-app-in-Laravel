@@ -84,11 +84,11 @@ class PostController extends Controller
 		else{
 			$like = new Like();
 		}
-		
+
 		$like->is_liked = $is_like;
 		$like->user_id = $user->id;
 		$like->post_id = $post->id;
-		
+
 		if($update){
 			$like->update();
 		}

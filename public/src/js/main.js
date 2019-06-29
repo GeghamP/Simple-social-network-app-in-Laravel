@@ -17,7 +17,9 @@
 		else if(event.target.classList.contains('fa-thumbs-up') || event.target.classList.contains('fa-thumbs-down')){
 			let like = event.currentTarget.querySelector('.like');
 			let dislike = event.currentTarget.querySelector('.dislike');
-			let is_like = event.target.classList.contains('fa-thumbs-up') ? 1 : 0;
+			//let parent = event.target.parentElement;
+			//console.log(parent);
+			let is_like = event.target.parentElement.classList.contains('like') ? 1 : 0;
 			
 			$.ajax({
 				method: 'POST',
@@ -27,7 +29,7 @@
 					post_id: post.dataset['postid'],
 					_token: $('#post-tools-token').val()
 				},
-				success: function(data){
+				success: function(){
 					if(is_like === 1){
 						let like_icon = like.querySelector('i');
 						like.innerHTML = like_icon.classList.contains('fas') ? '<i class = "far fa-thumbs-up"></i>' : '<i class = "fas fa-thumbs-up"></i>';
@@ -57,7 +59,7 @@
 	});
 	
 	function getPost(event){
-		return event.target.parentNode.parentNode;
+		return event.target.closest('article');
 	}
 	
 	function ajaxCall(post_id, action){
