@@ -121,7 +121,6 @@ class PostController extends Controller
 		$post->update();
 		
 		broadcast(new RatingChangeEvent($post));
-		return response()->json($post);
 	}
 	
 	public static function verifyStatus(Post $post, $for){
