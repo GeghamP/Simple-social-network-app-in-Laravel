@@ -19,6 +19,7 @@
 		<!-- Latest compiled JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 		<!-- jQuery library -->
+		<script src="https://js.pusher.com/4.4/pusher.min.js"></script>
         <script src="{{ URL::to('src/js/main.js') }}"></script>
     </body>
 </html>

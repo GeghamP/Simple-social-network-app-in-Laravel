@@ -28,7 +28,12 @@
 				
 					<div class = "info">
 						Posted by {{ $post->user->first_name }} on {{ $post->created_at->format('d/M/Y h:m:s') }} 
+						<div>
+							Likes: <span class="label num-likes label-success" style = "margin-right: 10px;">{{ $post->num_likes }}</span>
+							Disikes: <span class="label num-dislikes label-danger">{{ $post->num_dislikes }}</span>
+						</div>
 					</div>
+					
 					<div class = "interaction">
 						<a href = "#" class = "like" >
 							<i class = "{{ App\Http\Controllers\PostController::verifyStatus($post,'like') }}"></i>

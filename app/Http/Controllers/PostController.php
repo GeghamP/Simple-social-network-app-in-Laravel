@@ -6,6 +6,7 @@ use App\Post;
 use App\Like;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Events\RatingChangeEvent;
 
 class PostController extends Controller
 {
@@ -27,8 +28,8 @@ class PostController extends Controller
 	
 	public function getDashboard(Request $request){
 		$posts = Post::orderBy('created_at','DESC')->get();
-		//$posts = $request->user()->posts;
-		return view('dashboard',["posts" => $posts]);
+				
+		return view('dashboard',['posts' => $posts]);
 	}
 	
 	public function deletePost(Request $request){
@@ -70,19 +71,41 @@ class PostController extends Controller
 			return;
 		}
 		
+		
 		$user = Auth::user();
 		$like = $user->likes()->where('post_id', $post_id)->first();
+		$total_likes = $post->num_likes;
+		$total_dislikes = $post->num_dislikes;
 		
 		if($like){
 			$liked_already = $like->is_liked;
 			$update = true;
 			if($liked_already == $is_like){
 				$like->delete();
+				if($is_like == 1){
+					($liked_already == 1) ? $post->num_likes -= 1 : $post->num_likes += 1;
+				}
+				else{
+					($liked_already == 0) ? $post->num_dislikes -= 1 : $post->num_dislikes += 1;
+				}
+				$post->update();
+				broadcast(new RatingChangeEvent($post));
 				return;
+			}
+			else if($liked_already != $is_like){
+				if($is_like == 1){
+					$post->num_likes += 1;
+					$post->num_dislikes -= 1;
+				}
+				else{
+					$post->num_likes -= 1;
+					$post->num_dislikes += 1;
+				}
 			}
 		}
 		else{
 			$like = new Like();
+			($is_like == 1) ? $post->num_likes += 1 : $post->num_dislikes += 1;
 		}
 
 		$like->is_liked = $is_like;
@@ -95,6 +118,10 @@ class PostController extends Controller
 		else{
 			$like->save();
 		}
+		$post->update();
+		
+		broadcast(new RatingChangeEvent($post));
+		return response()->json($post);
 	}
 	
 	public static function verifyStatus(Post $post, $for){

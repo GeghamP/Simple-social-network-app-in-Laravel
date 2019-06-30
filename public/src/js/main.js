@@ -1,4 +1,28 @@
 ﻿$(document).ready(function(){
+	//Pusher.logToConsole = true;
+
+    var pusher = new Pusher('2b99ea80122390530f7e', {
+		cluster: 'ap2',
+		forceTLS: true
+    });
+
+    var channel = pusher.subscribe('RatingChangeChannel');
+    channel.bind('RatingChangeEvent', function(data) {
+		let post = data.post;
+		updateRating(post);
+    });
+	
+	//Called when RatingChangeEvent is triggered
+	function updateRating({ id, num_likes, num_dislikes }){
+		let posts = document.getElementsByClassName('post');
+		[].forEach.call(posts,(post) => {
+			if(post.dataset['postid'] == id){
+				post.querySelector('.num-likes').textContent = num_likes;
+				post.querySelector('.num-dislikes').textContent = num_dislikes;
+			}
+		});
+	}
+	
 	let post;
 	$('.interaction').click(function(event){
 		event.preventDefault();
@@ -7,7 +31,6 @@
 		//when clicking edit
 		if(event.target.classList.contains('edit-post')){
 			postTextElem = post.querySelector('.bost-body-text');
-			//console.log(postTextElem);
 			const postText = postTextElem.textContent;
 			$('#post_text').val(postText);
 			$('#edit_modal').modal();
@@ -15,10 +38,9 @@
 		
 		//when clicking like
 		else if(event.target.classList.contains('fa-thumbs-up') || event.target.classList.contains('fa-thumbs-down')){
+			
 			let like = event.currentTarget.querySelector('.like');
 			let dislike = event.currentTarget.querySelector('.dislike');
-			//let parent = event.target.parentElement;
-			//console.log(parent);
 			let is_like = event.target.parentElement.classList.contains('like') ? 1 : 0;
 			
 			$.ajax({
@@ -29,7 +51,8 @@
 					post_id: post.dataset['postid'],
 					_token: $('#post-tools-token').val()
 				},
-				success: function(){
+				success: function(data){
+					
 					if(is_like === 1){
 						let like_icon = like.querySelector('i');
 						like.innerHTML = like_icon.classList.contains('fas') ? '<i class = "far fa-thumbs-up"></i>' : '<i class = "fas fa-thumbs-up"></i>';
