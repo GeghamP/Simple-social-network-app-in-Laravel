@@ -86,7 +86,6 @@
 	}
 	
 	function ajaxCall(post_id, action){
-		console.log('caal');
 		$.ajax({
 			method: 'POST',
 			url: './'+action,
